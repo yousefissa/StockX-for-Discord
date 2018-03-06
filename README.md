@@ -10,12 +10,14 @@ StockX for Discord is a simple, self-hosted Discord bot providing essential info
 
 StockX for Discord requires Python 3, discord.py and requests.
 
-### Installing
+### Installation and Setup
 
 ```
 git clone https://github.com/71Oliver/StockX-Discord-Bot
 python main.py
 ```
+
+Follow this [tutorial](https://discordpy.readthedocs.io/en/rewrite/discord.html) to create a bot account. Input your token into `config.py`.
 
 ## Built With
 
