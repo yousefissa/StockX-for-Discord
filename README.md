@@ -34,6 +34,6 @@ Follow this [tutorial](https://discordpy.readthedocs.io/en/rewrite/discord.html)
 
 ## Authors
 
-* **Oliver** - [GitHub](https://github.com/71Oliver/)
+* **71Oliver** - [GitHub](https://github.com/71Oliver/)
 
 ## License
