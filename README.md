@@ -2,8 +2,6 @@
 
 StockX for Discord is a simple, self-hosted Discord bot providing essential information from StockX about the current value of sneakers.
 
-## Getting Started
-
 ### Example
 
 ![Imgur](https://i.imgur.com/VPFM8LM.png)
