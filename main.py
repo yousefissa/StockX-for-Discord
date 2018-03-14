@@ -2,40 +2,38 @@ import discord
 import json
 import logging
 import requests
-from config import *
 
-logger = logging.getLogger('discord')
-logger.setLevel(logging.ERROR)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+def logger_setup(): 
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.ERROR)
+    handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
+
+with open('config.json') as json_file:
+    json_data = json.load(json_file)
+
+headers = { 'User-Agent': json_data['user_agent'] }
+params = {
+    'x-algolia-agent': 'Algolia for vanilla JavaScript 3.22.1',
+    'x-algolia-api-key': '6bfb5abee4dcd8cea8f0ca1ca085c2b3',
+    'x-algolia-application-id': 'XW7SBCT9V6',
+}
 
 client = discord.Client()
-
 
 @client.event
 async def on_ready():
     print('{} Logged In!'.format(client.user.name))
 
-
 @client.event
 async def on_message(message):
     if message.content.startswith('!stockx '):
-        headers = {
-            'User-Agent': user_agent
-        }
-
-        params = {
-            'x-algolia-agent': 'Algolia for vanilla JavaScript 3.22.1',
-            'x-algolia-api-key': '6bfb5abee4dcd8cea8f0ca1ca085c2b3',
-            'x-algolia-application-id': 'XW7SBCT9V6',
-        }
-
         data = {
             "params": "query={}&hitsPerPage=20&facets=*".format(message.content.split('!stockx ')[1])
         }
 
-        response = requests.post(url=api_url, headers=headers, params=params, json=data)
+        response = requests.post(url=json_data['api_url'], headers=headers, params=params, json=data)
         output = json.loads(response.text)
 
         deadstock_sold = output['hits'][0]['deadstock_sold']
@@ -65,4 +63,6 @@ async def on_message(message):
         await client.send_message(message.channel, embed=embed)
 
 
-client.run(token)
+if __name__ == '__main__':
+    logger_setup()
+    client.run(json_data['discord_token'])
