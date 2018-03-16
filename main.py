@@ -70,6 +70,7 @@ def get_size_info(hits):
         Takes a hits json as an input
     '''
     try:
+        price_get = requests.get('https://stockx.com/{}'.format(hits[0]['url']))
         soup = BeautifulSoup(price_get.text, 'html.parser')   
         return {
             'last_sale' : soup.find('div', {'class': 'last-sale-block'}).find('span', {'class':'bid-ask-sizes'}).text,
