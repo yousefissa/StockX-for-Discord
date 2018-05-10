@@ -46,7 +46,7 @@ async def on_message(message):
             .format(message.content.split('!goat ')[1])
         }
 
-        response = requests.post(url=goat_url, headers=headers, params=params, json=data)
+        response = requests.post(url=json_data['goat_url'], headers=headers, params=params, json=data)
         output = json.loads(response.text)
 
         image = output['hits'][0]['picture_url']
