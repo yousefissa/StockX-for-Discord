@@ -29,6 +29,49 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
+    if message.content.startswith('!goat ') and json_data['channel_lock'] == False:
+        headers = {
+            'User-Agent': user_agent
+        }
+
+        params = {
+            'x-algolia-agent': 'Algolia for vanilla JavaScript 3.25.1',
+            'x-algolia-api-key': 'ac96de6fef0e02bb95d433d8d5c7038a',
+            'x-algolia-application-id': '2FWOTDVM2O',
+        }
+
+        data = {
+            "params": "query={}&facetFilters=(status%3Aactive%2C%20status%3Aactive_edit)%2C%20()&page=0&hitsPerPage=20"
+            .format(message.content.split('!goat ')[1])
+        }
+
+        response = requests.post(url=goat_url, headers=headers, params=params, json=data)
+        output = json.loads(response.text)
+
+        image = output['hits'][0]['picture_url']
+        name = output['hits'][0]['name']
+        new_lowest_price_cents = int(output['hits'][0]['new_lowest_price_cents'] / 100)
+        maximum_offer = int(output['hits'][0]['maximum_offer_cents'] / 100)
+        minimum_offer = int(output['hits'][0]['minimum_offer_cents'] / 100)
+        url = 'https://www.goat.com/sneakers/' + output['hits'][0]['slug']
+        used_lowest_price_cents = int(output['hits'][0]['used_lowest_price_cents'] / 100)
+        want_count = output['hits'][0]['want_count']
+        want_count_three = output['hits'][0]['three_day_rolling_want_count']
+
+        embed = discord.Embed()
+        embed.set_thumbnail(url=image)
+        embed.add_field(name="Product Name", value="[{}]({})".format(name, url), inline=False)
+        embed.add_field(name="Lowest Bid", value="${}".format(minimum_offer), inline=True)
+        embed.add_field(name="Highest Bid", value="${}".format(maximum_offer), inline=True)
+        embed.add_field(name="Used Lowest Price", value="${}".format(used_lowest_price_cents), inline=True)
+        embed.add_field(name="New Lowest Price", value="${}".format(new_lowest_price_cents), inline=True)
+        embed.add_field(name="Want Count in Last 3 Days", value="{}".format(want_count_three), inline=True)
+        embed.add_field(name="Total Want Count", value="{}".format(want_count), inline=True)
+
+        await client.send_message(message.channel, embed=embed)
+
+
     if message.content.startswith('!stockx ') and json_data['channel_lock'] == False:
         data = {
             "params": "query={}&hitsPerPage=20&facets=*".format(message.content.split('!stockx ')[1])
