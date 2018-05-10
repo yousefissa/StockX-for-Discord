@@ -30,7 +30,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    if message.content.startswith('!goat ') and json_data['channel_lock'] == False:
+    if message.content.startswith('!goat '):
         headers = {
             'User-Agent': user_agent
         }
@@ -72,7 +72,7 @@ async def on_message(message):
         await client.send_message(message.channel, embed=embed)
 
 
-    if message.content.startswith('!stockx ') and json_data['channel_lock'] == False:
+    if message.content.startswith('!stockx '):
         data = {
             "params": "query={}&hitsPerPage=20&facets=*".format(message.content.split('!stockx ')[1])
         }
