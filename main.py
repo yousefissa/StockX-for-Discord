@@ -29,7 +29,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('!stockx '):
+    if message.content.startswith('!stockx ') and json_data['channel_lock'] == False:
         data = {
             "params": "query={}&hitsPerPage=20&facets=*".format(message.content.split('!stockx ')[1])
         }
